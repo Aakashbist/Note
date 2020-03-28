@@ -1,7 +1,6 @@
-package com.aakashbista.note.UI.Fragment
+package com.aakashbista.note.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
-import com.aakashbista.note.UI.Adapter.NoteAdapter
-import com.aakashbista.note.UI.Extension.toast
-import com.aakashbista.note.ViewModel.NotesViewModel
+import com.aakashbista.note.ui.Adapter.NoteAdapter
+import com.aakashbista.note.ui.Extension.toast
+import com.aakashbista.note.viewModel.NotesViewModel
 import kotlinx.android.synthetic.main.notes_fragment.*
 
 class NotesFragment : Fragment() {

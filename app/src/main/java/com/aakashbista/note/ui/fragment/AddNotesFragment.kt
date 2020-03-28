@@ -1,4 +1,4 @@
-package com.aakashbista.note.UI.Fragment
+package com.aakashbista.note.ui.fragment
 
 import android.app.Application
 import android.graphics.Color
@@ -9,13 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
-import com.aakashbista.note.DB.Note
+import com.aakashbista.note.db.Note
 import com.aakashbista.note.R
-import com.aakashbista.note.UI.Extension.toast
-import com.aakashbista.note.UI.ViewModel.AddNotesViewModel
+import com.aakashbista.note.ui.Extension.toast
+import com.aakashbista.note.viewModel.AddNotesViewModel
 import kotlinx.android.synthetic.main.add_notes_fragment.*
-import kotlinx.coroutines.CoroutineScope
 
 class AddNotesFragment :Fragment() {
 
@@ -23,7 +21,7 @@ class AddNotesFragment :Fragment() {
         fun newInstance() = AddNotesFragment()
     }
  var note:Note?=null
-    private lateinit var viewModel:AddNotesViewModel
+    private lateinit var viewModel: AddNotesViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +34,7 @@ class AddNotesFragment :Fragment() {
         viewModel = ViewModelProvider(this).get(AddNotesViewModel(Application())::class.java)
 
         arguments?.let{
-            val id=AddNotesFragmentArgs.fromBundle(it).noteId
+            val id= AddNotesFragmentArgs.fromBundle(it).noteId
            note= viewModel.getNoteById(id)
             noteTilte.setText(note?.title)
             noteBody.setText(note?.note)

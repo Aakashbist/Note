@@ -1,4 +1,4 @@
-package com.aakashbista.note.DB
+package com.aakashbista.note.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

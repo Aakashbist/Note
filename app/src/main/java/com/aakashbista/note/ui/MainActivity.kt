@@ -1,4 +1,4 @@
-package com.aakashbista.note.UI
+package com.aakashbista.note.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

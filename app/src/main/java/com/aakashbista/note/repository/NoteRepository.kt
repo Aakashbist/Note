@@ -1,10 +1,10 @@
-package com.aakashbista.note.Repository
+package com.aakashbista.note.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.aakashbista.note.DB.Note
-import com.aakashbista.note.DB.NoteDao
-import com.aakashbista.note.DB.NoteDatabase
+import com.aakashbista.note.db.Note
+import com.aakashbista.note.db.NoteDao
+import com.aakashbista.note.db.NoteDatabase
 
 class NoteRepository(private val application: Application){
 

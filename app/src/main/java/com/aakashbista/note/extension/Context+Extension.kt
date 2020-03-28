@@ -1,4 +1,4 @@
-package com.aakashbista.note.UI.Extension
+package com.aakashbista.note.ui.Extension
 
 import android.content.Context
 import android.widget.Toast

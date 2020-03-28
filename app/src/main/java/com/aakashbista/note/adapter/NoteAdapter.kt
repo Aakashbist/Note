@@ -1,15 +1,13 @@
-package com.aakashbista.note.UI.Adapter
+package com.aakashbista.note.ui.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.aakashbista.note.DB.Note
+import com.aakashbista.note.db.Note
 import com.aakashbista.note.R
-import com.aakashbista.note.UI.Extension.toast
-import com.aakashbista.note.UI.Fragment.NotesFragmentDirections
+import com.aakashbista.note.ui.fragment.NotesFragmentDirections
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {

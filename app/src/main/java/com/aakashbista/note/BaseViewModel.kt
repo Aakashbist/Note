@@ -1,4 +1,4 @@
-package com.aakashbista.note.UI.Helper
+package com.aakashbista.note.ui.Helper
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
