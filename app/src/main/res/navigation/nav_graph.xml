@@ -14,9 +14,10 @@
             android:id="@+id/action_addNotes_to_notes"
             app:destination="@id/notes" />
         <argument
-            android:name="noteId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:name="note"
+            app:argType="com.aakashbista.note.db.Note"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/notes"

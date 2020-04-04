@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.repository.NoteRepository
-import com.aakashbista.note.ui.Helper.BaseViewModel
+import com.aakashbista.note.BaseViewModel
 import kotlinx.coroutines.launch
 
 class NotesViewModel(application: Application) : BaseViewModel(application) {

@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.R
 import com.aakashbista.note.ui.Adapter.NoteAdapter
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.viewModel.NotesViewModel
 import kotlinx.android.synthetic.main.notes_fragment.*
 
-class NotesFragment : Fragment() {
+class NotesFragment : Fragment() ,
+    NavigationFragment {
 
     companion object {
         fun newInstance() = NotesFragment()
@@ -52,13 +53,14 @@ class NotesFragment : Fragment() {
         })
 
         btn_add.setOnClickListener {
-            val action = NotesFragmentDirections.actionNotesToAddNotes()
-            Navigation.findNavController(it).navigate(action)
+            NotesFragmentDirections.actionNotesToAddNotes().navigateSafe()
         }
 
     }
 
-    val itemTouchHelperCallback =
+
+
+    private val itemTouchHelperCallback =
         object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(

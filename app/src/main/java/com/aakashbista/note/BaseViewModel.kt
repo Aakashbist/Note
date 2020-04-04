@@ -1,4 +1,4 @@
-package com.aakashbista.note.ui.Helper
+package com.aakashbista.note
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -12,7 +12,7 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
     private  var job= Job()
 
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get()  = job + Dispatchers.IO
 
 
 }

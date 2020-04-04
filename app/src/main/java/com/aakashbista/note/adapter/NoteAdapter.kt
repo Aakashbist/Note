@@ -24,7 +24,7 @@ class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         holder.setNotesInView(notes[position])
         holder.view.setOnClickListener {
-          var action=NotesFragmentDirections.actionNotesToAddNotes(notes[position].id)
+          var action=NotesFragmentDirections.actionNotesToAddNotes(notes[position])
            Navigation.findNavController(it).navigate(action)
         }
     }
@@ -46,8 +46,5 @@ class NoteAdapter() : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             view.noteBody.text = note.note
 
         }
-
-
-
     }
 }

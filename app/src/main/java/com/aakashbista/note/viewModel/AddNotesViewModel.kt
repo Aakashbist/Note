@@ -3,7 +3,7 @@ package com.aakashbista.note.viewModel
 import android.app.Application
 import com.aakashbista.note.repository.NoteRepository
 import com.aakashbista.note.db.Note
-import com.aakashbista.note.ui.Helper.BaseViewModel
+import com.aakashbista.note.BaseViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
