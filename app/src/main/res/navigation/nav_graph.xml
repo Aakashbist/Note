@@ -10,14 +10,14 @@
         android:name="com.aakashbista.note.ui.fragment.AddNotesFragment"
         android:label="AddNotes"
         tools:layout="@layout/add_notes_fragment">
-        <action
-            android:id="@+id/action_addNotes_to_notes"
-            app:destination="@id/notes" />
         <argument
             android:name="note"
             app:argType="com.aakashbista.note.db.Note"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/openDatePicker"
+            app:destination="@id/date_picker_actions"/>
     </fragment>
     <fragment
         android:id="@+id/notes"
@@ -25,7 +25,30 @@
         android:label="Notes"
         tools:layout="@layout/notes_fragment">
         <action
-            android:id="@+id/action_notes_to_addNotes"
+            android:id="@+id/openNote"
             app:destination="@id/addNotes" />
     </fragment>
+
+    <dialog
+        android:id="@+id/date_picker_actions"
+        android:name="com.aakashbista.note.ui.fragment.DatePickerFragment"
+         >
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="default"
+            app:nullable="true" />
+        <action
+            android:id="@+id/openTimePicer"
+            app:destination="@id/timePickerFragment"
+            app:popUpTo="@id/addNotes"/>
+    </dialog>
+    <dialog
+        android:id="@+id/timePickerFragment"
+        android:name="com.aakashbista.note.ui.fragment.TimePickerFragment"
+        android:label="TimePickerFragment" >
+        <argument
+            android:name="data"
+            app:argType="com.aakashbista.note.ui.fragment.TimePickerData" />
+    </dialog>
 </navigation>

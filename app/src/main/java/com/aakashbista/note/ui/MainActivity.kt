@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.aakashbista.note.R
+import com.aakashbista.note.ui.fragment.DatePickerFragment
 import com.aakashbista.note.ui.navigation.NavigationManager
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         navController = Navigation.findNavController(this, R.id.fragment)
     NavigationUI.setupActionBarWithNavController(this, navController)
 
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
              true
         }
     }
+
 
 
 }

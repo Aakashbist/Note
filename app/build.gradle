@@ -13,7 +13,7 @@ android {
         applicationId "com.aakashbista.note"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
+        versionCode 3
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +52,10 @@ dependencies {
 
     //Room
     def room_version = "2.2.5"
+
+    //Work Manager
+    def work_version = "2.3.4"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

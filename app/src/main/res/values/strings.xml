@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Note</string>
+    <string name="channel_Id">Reminder </string>
+    <string name="channel_title_Reminder">Reminder</string>
+    <string name="channel_Reminder_Description">Reminder channel description</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
