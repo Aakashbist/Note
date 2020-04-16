@@ -4,14 +4,14 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.db.NoteDao
-import com.aakashbista.note.db.NoteDatabase
+import com.aakashbista.note.db.AppDatabase
 
 class NoteRepository(private val application: Application){
 
      private lateinit var noteDao: NoteDao
 
     init {
-        noteDao = NoteDatabase(application).getNoteDao()
+        noteDao = AppDatabase(application).getNoteDao()
     }
 
     suspend fun addNote(note: Note) {

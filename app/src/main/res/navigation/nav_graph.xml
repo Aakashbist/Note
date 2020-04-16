@@ -15,9 +15,6 @@
             app:argType="com.aakashbista.note.db.Note"
             app:nullable="true"
             android:defaultValue="@null" />
-        <action
-            android:id="@+id/openDatePicker"
-            app:destination="@id/date_picker_actions"/>
     </fragment>
     <fragment
         android:id="@+id/notes"
@@ -41,7 +38,7 @@
         <action
             android:id="@+id/openTimePicer"
             app:destination="@id/timePickerFragment"
-            app:popUpTo="@id/addNotes"/>
+            app:popUpTo="@id/addReminderFragment"/>
     </dialog>
     <dialog
         android:id="@+id/timePickerFragment"
@@ -51,4 +48,22 @@
             android:name="data"
             app:argType="com.aakashbista.note.ui.fragment.TimePickerData" />
     </dialog>
+
+    <dialog
+        android:id="@+id/addReminderFragment"
+        android:name="com.aakashbista.note.ui.fragment.AddReminderFragment"
+        android:label="ReminderFragment" >
+        <action
+            android:id="@+id/openDatePicker"
+            app:destination="@id/date_picker_actions" />
+    </dialog>
+    <fragment
+        android:id="@+id/reminderFragment"
+        android:name="com.aakashbista.note.ui.fragment.ReminderFragment"
+        android:label="Reminder"
+        tools:layout="@layout/fragment_reminder" >
+        <action
+            android:id="@+id/openReminder"
+            app:destination="@id/addReminderFragment" />
+    </fragment>
 </navigation>

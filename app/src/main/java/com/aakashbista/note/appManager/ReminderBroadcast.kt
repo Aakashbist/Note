@@ -17,7 +17,7 @@ class ReminderBroadcast(message:String) : BroadcastReceiver() {
 
         var builder = context?.let {
             NotificationCompat.Builder(it, AppNotificationManager.CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_icon_round)
+                .setSmallIcon(R.drawable.ic_icon_round)
                 .setContentTitle("Reminder from Notes")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)

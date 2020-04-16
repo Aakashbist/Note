@@ -25,36 +25,28 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AddNotesFragment : Fragment(),
-    NavigationFragment, TimePickerFragment.TimeSetListener {
+    NavigationFragment {
 
 
     var note: Note? = null
     private lateinit var viewModel: AddNotesViewModel
-    var utc = TimeZone.getTimeZone("UTC")
-
-    var calender = Calendar.getInstance(utc)
+    var calender = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-
-
         return inflater.inflate(R.layout.add_notes_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
-
-
         viewModel = ViewModelProvider(this).get(AddNotesViewModel(Application())::class.java)
+
         arguments?.let {
             note = AddNotesFragmentArgs.fromBundle(it).note
             noteTilte.setText(note?.title)
             noteBody.setText(note?.note)
-
         }
 
         btn_save.setOnClickListener {
@@ -88,58 +80,13 @@ class AddNotesFragment : Fragment(),
             }
             findNavController().navigateUp()
         }
-
-        datepickerbtn.setOnClickListener {
-
-            showDatePickerDialog(reminderTextView.text.toString())
-        }
     }
 
-
-    private fun showDatePickerDialog(date: String) {
-        if (date.isNullOrBlank()) {
-            AddNotesFragmentDirections.openDatePicker("").navigateSafe()
-        } else {
-            AddNotesFragmentDirections.openDatePicker(date).navigateSafe()
-        }
-
-    }
-
-
-    private fun setAlarm(diff: Long) {
-        val reminderRequest = OneTimeWorkRequest
-            .Builder(NotificationWorker::class.java)
-            .setInitialDelay(diff, TimeUnit.MILLISECONDS)
-            .build()
-        WorkManager.getInstance(context!!).enqueue(reminderRequest)
-
-    }
 
     override fun onBackPressed(): Boolean {
         hideKeyboard()
         return super.onBackPressed()
     }
 
-    override fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
-        val now = Date(System.currentTimeMillis())
-        setCalender(year, month, day, hour, minute)
-        val delay: Long = calender.timeInMillis - System.currentTimeMillis()
-        reminderTextView.text = DateFormat.getTimeInstance(DateFormat.LONG).format(calender.time)
-        setAlarm(delay)
-    }
 
-    private fun setCalender(
-        year: Int,
-        month: Int,
-        day: Int,
-        hour: Int,
-        minute: Int
-    ) {
-        calender.set(Calendar.YEAR, year)
-        calender.set(Calendar.MONTH, month)
-        calender.set(Calendar.DAY_OF_MONTH, day)
-        calender.set(Calendar.HOUR, hour)
-        calender.set(Calendar.MINUTE, minute)
-        calender.set(Calendar.SECOND, 0)
-    }
 }

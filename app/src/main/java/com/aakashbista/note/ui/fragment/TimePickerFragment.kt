@@ -15,9 +15,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 
     interface TimeSetListener {
         fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int)
-
     }
-
 
     val parent: TimeSetListener
         get() = getParentFragmentListener<TimeSetListener>(true)
@@ -30,7 +28,6 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
         arguments?.let {
             val timePickerData = TimePickerFragmentArgs.fromBundle(it).data
             parent.onTimeSet(
