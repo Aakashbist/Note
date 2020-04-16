@@ -12,10 +12,10 @@
     <EditText
         android:id="@+id/title"
         android:layout_width="321dp"
-        android:layout_height="30dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"
-        android:text="Title"
+        android:hint="Title"
         android:textColor="#000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +24,7 @@
     <TextView
         android:id="@+id/dateTimeTextView"
         android:layout_width="327dp"
+        android:hint="date time"
         android:layout_height="47dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="16dp"

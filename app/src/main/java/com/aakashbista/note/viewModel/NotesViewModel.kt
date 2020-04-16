@@ -14,7 +14,6 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
     lateinit var notes: LiveData<List<Note>>
 
     init {
-       repository = NoteRepository(application)
         getAllNotes()
     }
 
@@ -23,7 +22,7 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
 
     }
 
-    public fun deleteNote(note:Note){
+    fun deleteNote(note:Note){
         launch {
              repository.deleteNote(note)
         }

@@ -11,6 +11,7 @@ import java.util.*
 
 data class Reminder(
     val title: String,
+    var description:String,
     val dateTime:Date
 ): Parcelable {
     @PrimaryKey(autoGenerate = true)

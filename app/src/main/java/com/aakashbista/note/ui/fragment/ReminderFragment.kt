@@ -2,23 +2,23 @@ package com.aakashbista.note.ui.fragment
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.work.OneTimeWorkRequest
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.aakashbista.note.R
-import com.aakashbista.note.appManager.NotificationWorker
+import com.aakashbista.note.adapter.ReminderAdapter
 import com.aakashbista.note.ui.navigation.NavigationFragment
-import java.util.*
-import java.util.concurrent.TimeUnit
+import com.aakashbista.note.viewModel.ReminderViewModel
+import kotlinx.android.synthetic.main.fragment_reminder.*
 
-/**
- * A simple [Fragment] subclass.
- */
-class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClickListener{
+class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClickListener {
 
 
+    private lateinit var reminderAdapter: ReminderAdapter
+    private lateinit var viewModel: ReminderViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +31,37 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)
+
+
+        reminderRecyclerView.setHasFixedSize(true)
+        reminderRecyclerView.layoutManager = LinearLayoutManager(context)
+        reminderAdapter = ReminderAdapter { reminder, isChecked ->
+
+            if (isChecked) {
+                //set alarm after checking
+            } else {
+
+                WorkManager.getInstance(context!!)
+                    .cancelAllWorkByTag("${reminder.title}${reminder.description}")
+            }
+
+//           WorkManager.getInstance(context!!)
+//                .getWorkInfosByTagLiveData("${reminder.title}${reminder.description}")
+//                .observe(viewLifecycleOwner, Observer { it: MutableList<WorkInfo>? ->
+//
+//
+//                })
+        }
+        reminderRecyclerView.adapter = reminderAdapter
+
+        viewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
+        viewModel.reminders.observe(viewLifecycleOwner, Observer { reminders ->
+            reminders?.let {
+                reminderAdapter.setReminder(reminders)
+            }
+        })
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.app_bar, menu)
@@ -57,6 +87,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
     private fun showAddReminderDialog() {
         ReminderFragmentDirections.openReminder().navigateSafe()
     }
+
 
 }
 

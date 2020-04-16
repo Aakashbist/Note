@@ -3,26 +3,19 @@ package com.aakashbista.note.ui.fragment
 import android.app.Application
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.aakashbista.note.R
-import com.aakashbista.note.appManager.NotificationWorker
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.extension.hideKeyboard
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddNotesViewModel
 import kotlinx.android.synthetic.main.add_notes_fragment.*
-import java.text.DateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class AddNotesFragment : Fragment(),
     NavigationFragment {
@@ -30,7 +23,6 @@ class AddNotesFragment : Fragment(),
 
     var note: Note? = null
     private lateinit var viewModel: AddNotesViewModel
-    var calender = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
 
     override fun onCreateView(
@@ -45,41 +37,46 @@ class AddNotesFragment : Fragment(),
 
         arguments?.let {
             note = AddNotesFragmentArgs.fromBundle(it).note
-            noteTilte.setText(note?.title)
-            noteBody.setText(note?.note)
+            reminderTitle.setText(note?.title)
+            reminderDescription.setText(note?.note)
         }
 
         btn_save.setOnClickListener {
 
-            val noteTitle = noteTilte.text.toString().trim()
-            val body = noteBody.text.toString().trim()
-
-            if (noteTitle.isEmpty()) {
-                noteTilte.error = "required"
-                noteTilte.setTextColor(Color.RED)
-                noteTilte.requestFocus()
-                return@setOnClickListener
-            }
-            if (body.isEmpty()) {
-                noteBody.error = "required"
-                noteBody.setTextColor(Color.RED)
-                noteBody.requestFocus()
-                return@setOnClickListener
-            }
-
-            context?.let {
-                val mNote = Note(noteTitle, body)
-                if (note == null) {
-                    viewModel.addNote(mNote)
-                    it.toast("Note Added")
-                } else {
-                    mNote.id = note!!.id
-                    viewModel.update(mNote)
-                    it.toast("Note updated")
-                }
-            }
+            if (saveNote()) return@setOnClickListener
             findNavController().navigateUp()
         }
+    }
+
+    private fun saveNote(): Boolean {
+        val title = reminderTitle.text.toString().trim()
+        val body = reminderDescription.text.toString().trim()
+
+        if (title.isEmpty()) {
+            reminderTitle.error = "required"
+            reminderTitle.setTextColor(Color.RED)
+            reminderTitle.requestFocus()
+            return true
+        }
+        if (body.isEmpty()) {
+            reminderDescription.error = "required"
+            reminderDescription.setTextColor(Color.RED)
+            reminderDescription.requestFocus()
+            return true
+        }
+
+        context?.let {
+            val mNote = Note(title, body)
+            if (note == null) {
+                viewModel.addNote(mNote)
+                it.toast("Note Added")
+            } else {
+                mNote.id = note!!.id
+                viewModel.update(mNote)
+                it.toast("Note updated")
+            }
+        }
+        return false
     }
 
 

@@ -8,13 +8,19 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.aakashbista.note.R
+import javax.xml.transform.Result
 
 
 class NotificationWorker (appContext: Context, workerParams: WorkerParameters)
 : Worker(appContext, workerParams){
 
     override fun doWork(): Result {
-        sendNotification("Note", "Reminder of notes")
+
+        val title = inputData.getString("TITLE_KEY")
+        val description = inputData.getString("DESCRIPTION_KEY")
+
+        sendNotification(title!!,description!!)
+
         return Result.success()
     }
 
@@ -30,6 +36,11 @@ class NotificationWorker (appContext: Context, workerParams: WorkerParameters)
 
 
         notificationCompat.notify(1, builder.build())
+
+    }
+
+    override fun onStopped() {
+        super.onStopped()
 
     }
 }
