@@ -9,7 +9,6 @@ import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
 import com.aakashbista.note.extension.getParentFragmentListener
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
 
@@ -17,28 +16,28 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int)
     }
 
+    private lateinit var timePickerData: TimePickerData
     val parent: TimeSetListener
         get() = getParentFragmentListener<TimeSetListener>(true)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val c = Calendar.getInstance()
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
+        timePickerData = TimePickerFragmentArgs.fromBundle(arguments!!).data!!
+        var hour: Int = timePickerData.hourOfDay
+        var minute: Int = timePickerData.minute
+
+
         return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        arguments?.let {
-            val timePickerData = TimePickerFragmentArgs.fromBundle(it).data
-            parent.onTimeSet(
-                timePickerData.year,
-                timePickerData.month,
-                timePickerData.day,
-                hourOfDay,
-                minute
-            )
-        }
 
+        parent.onTimeSet(
+            timePickerData.year,
+            timePickerData.month,
+            timePickerData.day,
+            hourOfDay,
+            minute
+        )
     }
 }
 
@@ -46,5 +45,7 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
 data class TimePickerData(
     val year: Int,
     val month: Int,
-    val day: Int
+    val day: Int,
+    val hourOfDay: Int,
+    val minute: Int
 ) : Parcelable

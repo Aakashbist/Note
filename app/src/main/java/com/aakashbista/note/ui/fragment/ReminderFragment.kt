@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.WorkManager
 import com.aakashbista.note.R
 import com.aakashbista.note.adapter.ReminderAdapter
+import com.aakashbista.note.db.Reminder
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.ReminderViewModel
 import kotlinx.android.synthetic.main.fragment_reminder.*
+import java.util.*
 
-class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClickListener {
+class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClickListener,
+    ReminderAdapter.ReminderActionListener {
 
 
     private lateinit var reminderAdapter: ReminderAdapter
@@ -24,7 +27,6 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_reminder, container, false)
     }
 
@@ -35,25 +37,8 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
         reminderRecyclerView.setHasFixedSize(true)
         reminderRecyclerView.layoutManager = LinearLayoutManager(context)
-        reminderAdapter = ReminderAdapter { reminder, isChecked ->
-
-            if (isChecked) {
-                //set alarm after checking
-            } else {
-
-                WorkManager.getInstance(context!!)
-                    .cancelAllWorkByTag("${reminder.title}${reminder.description}")
-            }
-
-//           WorkManager.getInstance(context!!)
-//                .getWorkInfosByTagLiveData("${reminder.title}${reminder.description}")
-//                .observe(viewLifecycleOwner, Observer { it: MutableList<WorkInfo>? ->
-//
-//
-//                })
-        }
+        reminderAdapter = ReminderAdapter(this)
         reminderRecyclerView.adapter = reminderAdapter
-
         viewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
         viewModel.reminders.observe(viewLifecycleOwner, Observer { reminders ->
             reminders?.let {
@@ -86,6 +71,25 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
     private fun showAddReminderDialog() {
         ReminderFragmentDirections.openReminder().navigateSafe()
+    }
+
+    override fun reminderOpen(reminder: Reminder) {
+        ReminderFragmentDirections.openReminder(reminder).navigateSafe()
+    }
+
+    override fun reminderStateChanged(reminder: Reminder, state: ReminderAdapter.ReminderState) {
+
+        when (state) {
+
+            ReminderAdapter.ReminderState.ENABLE -> {
+
+            }
+            ReminderAdapter.ReminderState.DISABLE -> {
+                WorkManager.getInstance(context!!)
+                    .cancelAllWorkByTag("${reminder.title}")
+            }
+
+        }
     }
 
 

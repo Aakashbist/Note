@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.note_item.view.*
 
 
 class NoteAdapter(
+
     val itemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     private var notes = emptyList<Note>()
@@ -46,14 +47,14 @@ class NoteAdapter(
             view.reminderTitle.text = note.title
             view.reminderDescription.text = note.note
             view.setOnClickListener {
-                itemClickListener.onItemClicked(note, view)
+                itemClickListener.onItemClicked(note)
             }
 
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClicked(note: Note, view: View)
+        fun onItemClicked(note: Note)
     }
 
 }

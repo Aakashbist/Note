@@ -5,13 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.aakashbista.note.converter.DateConverter
+import com.aakashbista.note.converter.LocalDateTimeConverter
 
 @Database(
     entities = [Note::class,Reminder::class],
     version = 1
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getNoteDao(): NoteDao

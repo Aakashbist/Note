@@ -4,6 +4,7 @@ package com.aakashbista.note.ui.fragment
 import android.app.Application
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,9 @@ import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddReminderViewModel
 import kotlinx.android.synthetic.main.add_reminder_fragment.*
 import java.text.DateFormat
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -31,10 +35,9 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     NavigationFragment {
 
     var reminder: Reminder? = null
-    var dateTime: Date? = null
 
     lateinit var viewModel: AddReminderViewModel
-    var calender = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+    private  var localDateTime: LocalDateTime? =null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +50,15 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AddReminderViewModel(Application())::class.java)
 
+        arguments?.let {
+            reminder = AddReminderFragmentArgs.fromBundle(it).reminder
+            if(reminder!=null) {
+                title.setText(reminder?.title)
+                reminderDescription.setText(reminder?.description)
+                val dateTimeFormatter= DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+                dateTimeTextView.setText(reminder?.dateTime?.format(dateTimeFormatter))
+            }
+        }
 
         action_cancel.setOnClickListener {
             dialog?.dismiss()
@@ -60,7 +72,6 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
             if (saveReminder()) return@setOnClickListener
             dialog?.dismiss()
         }
-
     }
 
     private fun saveReminder(): Boolean {
@@ -89,7 +100,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         }
 
         context?.let {
-            val mReminder = dateTime?.let { date -> Reminder(reminderTitle, description, date) }
+            val mReminder =  Reminder(reminderTitle, description, localDateTime!!)
             if (reminder == null) {
                 viewModel.addReminder(mReminder!!)
                 it.toast("Reminder Added")
@@ -99,27 +110,30 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
                 it.toast("Reminder updated")
             }
         }
-        val delay: Long = calender.timeInMillis - System.currentTimeMillis()
+
+        val delay: Duration =  Duration.between( LocalDateTime.now(),localDateTime)
+        Log.d("date",delay.toMillis().toString() + " "+ localDateTime+ " "+  LocalDateTime.now())
         setAlarm(delay, reminderTitle, description)
         return false
     }
 
     private fun showDatePickerDialog() {
-        AddReminderFragmentDirections.openDatePicker().navigateSafe()
+        AddReminderFragmentDirections.openDatePicker(reminder?.dateTime).navigateSafe()
     }
 
 
-    private fun setAlarm(time: Long, reminderTitle: String, description: String) {
+    private fun setAlarm(time: Duration, reminderTitle: String, description: String) {
         val reminderRequest = OneTimeWorkRequest
             .Builder(NotificationWorker::class.java)
             .setInputData(createInputData(reminderTitle, description))
-            .addTag("${title}${description}")
-            .setInitialDelay(20, TimeUnit.SECONDS)
+            .addTag("${title}")
+            .setInitialDelay(time.toMillis(), TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(context!!).enqueue(reminderRequest)
+        WorkManager.getInstance(context!!).getWorkInfoByIdLiveData(reminderRequest.id)
     }
 
-    fun createInputData(reminderTitle: String, description: String): Data {
+    private fun createInputData(reminderTitle: String, description: String): Data {
         return Data.Builder()
             .putString("TITLE_KEY", reminderTitle)
             .putString("DESCRIPTION_KEY", description)
@@ -127,25 +141,9 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     }
 
     override fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
-        setCalender(year, month, day, hour, minute)
-        dateTime = calender.time
-        dateTimeTextView.text =
-            DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(calender.time)
-
+        localDateTime= LocalDateTime.of(year,month,day,hour, minute)
+        val dateTimeFormatter= DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+        dateTimeTextView.text = localDateTime?.format(dateTimeFormatter)
     }
 
-    private fun setCalender(
-        year: Int,
-        month: Int,
-        day: Int,
-        hour: Int,
-        minute: Int
-    ) {
-        calender.set(Calendar.YEAR, year)
-        calender.set(Calendar.MONTH, month)
-        calender.set(Calendar.DAY_OF_MONTH, day)
-        calender.set(Calendar.HOUR, hour)
-        calender.set(Calendar.MINUTE, minute)
-        calender.set(Calendar.SECOND, 0)
-    }
 }

@@ -30,15 +30,14 @@
         android:id="@+id/date_picker_actions"
         android:name="com.aakashbista.note.ui.fragment.DatePickerFragment"
          >
-        <argument
-            android:name="date"
-            app:argType="string"
-            android:defaultValue="default"
-            app:nullable="true" />
         <action
             android:id="@+id/openTimePicer"
             app:destination="@id/timePickerFragment"
             app:popUpTo="@id/addReminderFragment"/>
+        <argument
+            android:name="dateTime"
+            app:argType="java.time.LocalDateTime"
+            app:nullable="true" />
     </dialog>
     <dialog
         android:id="@+id/timePickerFragment"
@@ -56,6 +55,11 @@
         <action
             android:id="@+id/openDatePicker"
             app:destination="@id/date_picker_actions" />
+        <argument
+            android:name="reminder"
+            app:argType="com.aakashbista.note.db.Reminder"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </dialog>
     <fragment
         android:id="@+id/reminderFragment"

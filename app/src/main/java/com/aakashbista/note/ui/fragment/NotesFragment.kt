@@ -21,8 +21,8 @@ import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.NotesViewModel
 import kotlinx.android.synthetic.main.notes_fragment.*
 
-class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener,
-    DatePickerDialog.OnDateSetListener {
+class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener
+   {
     companion object {
         fun newInstance() = NotesFragment()
     }
@@ -81,12 +81,9 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener,
         }
 
 
-    override fun onItemClicked(note: Note, view: View) {
+    override fun onItemClicked(note: Note) {
         NotesFragmentDirections.openNote(note).navigateSafe()
     }
 
 
-    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        TODO("Not yet implemented")
-    }
 }
