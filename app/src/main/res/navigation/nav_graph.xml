@@ -37,7 +37,8 @@
         <argument
             android:name="dateTime"
             app:argType="java.time.LocalDateTime"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
     </dialog>
     <dialog
         android:id="@+id/timePickerFragment"

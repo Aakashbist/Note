@@ -21,7 +21,6 @@ import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddReminderViewModel
 import kotlinx.android.synthetic.main.add_reminder_fragment.*
-import java.text.DateFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -35,9 +34,8 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     NavigationFragment {
 
     var reminder: Reminder? = null
-
     lateinit var viewModel: AddReminderViewModel
-    private  var localDateTime: LocalDateTime? =null
+    private var localDateTime: LocalDateTime? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,10 +50,10 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
 
         arguments?.let {
             reminder = AddReminderFragmentArgs.fromBundle(it).reminder
-            if(reminder!=null) {
+            if (reminder != null) {
                 title.setText(reminder?.title)
                 reminderDescription.setText(reminder?.description)
-                val dateTimeFormatter= DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+                val dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
                 dateTimeTextView.setText(reminder?.dateTime?.format(dateTimeFormatter))
             }
         }
@@ -100,7 +98,19 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         }
 
         context?.let {
-            val mReminder =  Reminder(reminderTitle, description, localDateTime!!)
+
+            val delay: Duration = Duration.between(LocalDateTime.now(), localDateTime)
+            Log.d(
+                "date",
+                delay.toMillis().toString() + " " + localDateTime + " " + LocalDateTime.now()
+            )
+            val reminderNotificationWorkRequestId = setAlarm(delay, reminderTitle, description)
+            val mReminder = Reminder(
+                reminderTitle,
+                description,
+                localDateTime!!,
+                reminderNotificationWorkRequestId
+            )
             if (reminder == null) {
                 viewModel.addReminder(mReminder!!)
                 it.toast("Reminder Added")
@@ -111,9 +121,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
             }
         }
 
-        val delay: Duration =  Duration.between( LocalDateTime.now(),localDateTime)
-        Log.d("date",delay.toMillis().toString() + " "+ localDateTime+ " "+  LocalDateTime.now())
-        setAlarm(delay, reminderTitle, description)
+
         return false
     }
 
@@ -122,15 +130,17 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     }
 
 
-    private fun setAlarm(time: Duration, reminderTitle: String, description: String) {
+    private fun setAlarm(time: Duration, reminderTitle: String, description: String): String {
         val reminderRequest = OneTimeWorkRequest
             .Builder(NotificationWorker::class.java)
             .setInputData(createInputData(reminderTitle, description))
-            .addTag("${title}")
+            .addTag("$title")
             .setInitialDelay(time.toMillis(), TimeUnit.MILLISECONDS)
             .build()
-        WorkManager.getInstance(context!!).enqueue(reminderRequest)
-        WorkManager.getInstance(context!!).getWorkInfoByIdLiveData(reminderRequest.id)
+        val instance = WorkManager.getInstance(context!!)
+        instance.enqueue(reminderRequest)
+        return reminderRequest.id.toString()
+
     }
 
     private fun createInputData(reminderTitle: String, description: String): Data {
@@ -141,8 +151,8 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     }
 
     override fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
-        localDateTime= LocalDateTime.of(year,month,day,hour, minute)
-        val dateTimeFormatter= DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
+        localDateTime = LocalDateTime.of(year, month, day, hour, minute)
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
         dateTimeTextView.text = localDateTime?.format(dateTimeFormatter)
     }
 

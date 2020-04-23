@@ -2,11 +2,13 @@ package com.aakashbista.note.ui.fragment
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.aakashbista.note.R
 import com.aakashbista.note.adapter.ReminderAdapter
@@ -78,15 +80,22 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
     }
 
     override fun reminderStateChanged(reminder: Reminder, state: ReminderAdapter.ReminderState) {
-
+        val uuid: UUID = UUID.fromString(reminder.workRequestId)
         when (state) {
 
             ReminderAdapter.ReminderState.ENABLE -> {
-
+                Log.d("in ", "xxxx")
             }
             ReminderAdapter.ReminderState.DISABLE -> {
                 WorkManager.getInstance(context!!)
-                    .cancelAllWorkByTag("${reminder.title}")
+                    .getWorkInfoByIdLiveData(uuid)
+                    .observe(viewLifecycleOwner,
+                        Observer { it: WorkInfo? ->
+                            if (it != null) {
+                                if (it.state == WorkInfo.State.ENQUEUED)
+                                    WorkManager.getInstance(context!!).cancelWorkById(uuid)
+                            }
+                        })
             }
 
         }

@@ -8,11 +8,12 @@ import androidx.fragment.app.DialogFragment
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import java.time.LocalDateTime
 
+
 class DatePickerFragment : DialogFragment(), NavigationFragment,
     DatePickerDialog.OnDateSetListener {
 
 
-    private var localDateTime: LocalDateTime = LocalDateTime.now()
+    private  var localDateTime: LocalDateTime? = null
     private var year: Int = 0
     private var month: Int = 0
     private var dayOfMonth: Int = 0
@@ -20,12 +21,14 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
     private var minute: Int = 0
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        localDateTime = DatePickerFragmentArgs.fromBundle(arguments!!).dateTime!!
+
+        localDateTime = DatePickerFragmentArgs.fromBundle(arguments!!).dateTime
 
         if (localDateTime != null) {
             setDateTimeInCalender()
 
         } else {
+            localDateTime= LocalDateTime.now()
             setDateTimeInCalender()
         }
 
@@ -37,7 +40,7 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
                 month,
                 dayOfMonth
             )
-        }!!
+        }
     }
 
     private fun setDateTimeInCalender() {
@@ -49,11 +52,6 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
             minute = it.minute
         }
 
-//        year = calender.get(Calendar.YEAR)
-//        month = calender.get(Calendar.MONTH)
-//        dayOfMonth = calender.get(Calendar.DAY_OF_MONTH)
-//        hourOfDay = calender.get(Calendar.HOUR_OF_DAY)
-//        minute = calender.get(Calendar.MINUTE)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -71,7 +69,3 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
 
 
 }
-
-
-
-
