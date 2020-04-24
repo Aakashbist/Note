@@ -2,21 +2,26 @@ package com.aakashbista.note.ui.fragment
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.aakashbista.note.R
 import com.aakashbista.note.adapter.ReminderAdapter
+import com.aakashbista.note.appManager.NotificationWorker
 import com.aakashbista.note.db.Reminder
+import com.aakashbista.note.extension.createDate
+import com.aakashbista.note.extension.millisToNotify
 import com.aakashbista.note.ui.navigation.NavigationFragment
+import com.aakashbista.note.viewModel.AddReminderViewModel
 import com.aakashbista.note.viewModel.ReminderViewModel
 import kotlinx.android.synthetic.main.fragment_reminder.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClickListener,
     ReminderAdapter.ReminderActionListener {
@@ -24,6 +29,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
     private lateinit var reminderAdapter: ReminderAdapter
     private lateinit var viewModel: ReminderViewModel
+    private lateinit var addReminderViewModel: AddReminderViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +37,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
     ): View? {
         return inflater.inflate(R.layout.fragment_reminder, container, false)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -42,6 +49,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
         reminderAdapter = ReminderAdapter(this)
         reminderRecyclerView.adapter = reminderAdapter
         viewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
+        addReminderViewModel = ViewModelProvider(this).get(AddReminderViewModel::class.java)
         viewModel.reminders.observe(viewLifecycleOwner, Observer { reminders ->
             reminders?.let {
                 reminderAdapter.setReminder(reminders)
@@ -81,21 +89,27 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
     override fun reminderStateChanged(reminder: Reminder, state: ReminderAdapter.ReminderState) {
         val uuid: UUID = UUID.fromString(reminder.workRequestId)
-        when (state) {
+        val instance = WorkManager.getInstance(requireContext())
 
+        when (state) {
             ReminderAdapter.ReminderState.ENABLE -> {
-                Log.d("in ", "xxxx")
+                val reminderRequest = OneTimeWorkRequest
+                    .Builder(NotificationWorker::class.java)
+                    .setInputData(reminder.createDate())
+                    .setInitialDelay(reminder.millisToNotify(), TimeUnit.MILLISECONDS)
+                    .build()
+                instance.enqueue(reminderRequest)
+                addReminderViewModel.update(reminder.copy(workRequestId = reminderRequest.id.toString()))
             }
+
             ReminderAdapter.ReminderState.DISABLE -> {
-                WorkManager.getInstance(context!!)
-                    .getWorkInfoByIdLiveData(uuid)
-                    .observe(viewLifecycleOwner,
-                        Observer { it: WorkInfo? ->
-                            if (it != null) {
-                                if (it.state == WorkInfo.State.ENQUEUED)
-                                    WorkManager.getInstance(context!!).cancelWorkById(uuid)
-                            }
-                        })
+                instance.getWorkInfoByIdLiveData(uuid)
+                    .observe(viewLifecycleOwner, Observer {
+                        if (it != null && it.state == WorkInfo.State.ENQUEUED) {
+                            WorkManager.getInstance(context!!).cancelWorkById(uuid)
+                            addReminderViewModel.update(reminder.copy(workRequestId = null))
+                        }
+                    })
             }
 
         }

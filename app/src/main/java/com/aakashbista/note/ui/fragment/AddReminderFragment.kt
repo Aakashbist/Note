@@ -17,6 +17,8 @@ import androidx.work.WorkManager
 import com.aakashbista.note.R
 import com.aakashbista.note.appManager.NotificationWorker
 import com.aakashbista.note.db.Reminder
+import com.aakashbista.note.extension.createDate
+import com.aakashbista.note.extension.formatedDate
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddReminderViewModel
@@ -53,8 +55,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
             if (reminder != null) {
                 title.setText(reminder?.title)
                 reminderDescription.setText(reminder?.description)
-                val dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
-                dateTimeTextView.setText(reminder?.dateTime?.format(dateTimeFormatter))
+                dateTimeTextView.setText(reminder?.dateTime?.formatedDate())
             }
         }
 
@@ -98,25 +99,20 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         }
 
         context?.let {
-
             val delay: Duration = Duration.between(LocalDateTime.now(), localDateTime)
-            Log.d(
-                "date",
-                delay.toMillis().toString() + " " + localDateTime + " " + LocalDateTime.now()
-            )
-            val reminderNotificationWorkRequestId = setAlarm(delay, reminderTitle, description)
-            val mReminder = Reminder(
+            var mReminder = Reminder(
                 reminderTitle,
                 description,
-                localDateTime!!,
-                reminderNotificationWorkRequestId
+                localDateTime!!
             )
+            val reminderNotificationWorkRequestId = setAlarm(delay,mReminder )
+            mReminder=mReminder.copy(workRequestId =reminderNotificationWorkRequestId )
             if (reminder == null) {
-                viewModel.addReminder(mReminder!!)
+                viewModel.addReminder(mReminder)
                 it.toast("Reminder Added")
             } else {
-                mReminder?.id = reminder!!.id
-                viewModel.update(mReminder!!)
+                mReminder.id = reminder!!.id
+                viewModel.update(mReminder)
                 it.toast("Reminder updated")
             }
         }
@@ -130,25 +126,20 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     }
 
 
-    private fun setAlarm(time: Duration, reminderTitle: String, description: String): String {
+    private fun setAlarm(time: Duration, reminder:Reminder): String {
         val reminderRequest = OneTimeWorkRequest
             .Builder(NotificationWorker::class.java)
-            .setInputData(createInputData(reminderTitle, description))
-            .addTag("$title")
+            .setInputData(reminder.createDate())
             .setInitialDelay(time.toMillis(), TimeUnit.MILLISECONDS)
             .build()
-        val instance = WorkManager.getInstance(context!!)
+
+        val instance = WorkManager.getInstance(requireContext())
         instance.enqueue(reminderRequest)
         return reminderRequest.id.toString()
 
     }
 
-    private fun createInputData(reminderTitle: String, description: String): Data {
-        return Data.Builder()
-            .putString("TITLE_KEY", reminderTitle)
-            .putString("DESCRIPTION_KEY", description)
-            .build()
-    }
+
 
     override fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
         localDateTime = LocalDateTime.of(year, month, day, hour, minute)

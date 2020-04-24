@@ -46,6 +46,7 @@ class NoteAdapter(
         fun setNotesInView(note: Note, itemClickListener: OnItemClickListener) {
             view.reminderTitle.text = note.title
             view.reminderDescription.text = note.note
+
             view.setOnClickListener {
                 itemClickListener.onItemClicked(note)
             }

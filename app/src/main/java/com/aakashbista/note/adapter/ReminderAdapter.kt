@@ -8,6 +8,7 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Reminder
+import com.aakashbista.note.extension.formatedDate
 import kotlinx.android.synthetic.main.add_reminder_fragment.*
 import kotlinx.android.synthetic.main.note_item.view.reminderDescription
 import kotlinx.android.synthetic.main.note_item.view.reminderTitle
@@ -49,10 +50,8 @@ class ReminderAdapter(
         ) {
             view.reminderTitle.text = reminder.title
             view.reminderDescription.text = reminder.description
-            val dateTimeFormatter= DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
-            view.dateTime.text= reminder.dateTime.format(dateTimeFormatter)
-//            view.dateTime.text = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
-//                .format(reminder.dateTime.time)
+            view.action_switch.isChecked = reminder.isEnabled
+            view.dateTime.text= reminder.dateTime.formatedDate()
             view.setOnClickListener {
                 reminderActionListener.reminderOpen(reminder)
             }
