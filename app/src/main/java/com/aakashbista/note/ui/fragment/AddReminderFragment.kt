@@ -4,21 +4,19 @@ package com.aakashbista.note.ui.fragment
 import android.app.Application
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.aakashbista.note.R
 import com.aakashbista.note.appManager.NotificationWorker
 import com.aakashbista.note.db.Reminder
 import com.aakashbista.note.extension.createDate
-import com.aakashbista.note.extension.formatedDate
+import com.aakashbista.note.extension.formatDate
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddReminderViewModel
@@ -26,7 +24,6 @@ import kotlinx.android.synthetic.main.add_reminder_fragment.*
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -53,9 +50,10 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         arguments?.let {
             reminder = AddReminderFragmentArgs.fromBundle(it).reminder
             if (reminder != null) {
+                localDateTime=reminder?.dateTime
                 title.setText(reminder?.title)
                 reminderDescription.setText(reminder?.description)
-                dateTimeTextView.setText(reminder?.dateTime?.formatedDate())
+                dateTimeTextView.setText(reminder?.dateTime?.formatDate())
             }
         }
 

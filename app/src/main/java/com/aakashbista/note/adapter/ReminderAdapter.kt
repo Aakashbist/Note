@@ -3,18 +3,13 @@ package com.aakashbista.note.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Reminder
-import com.aakashbista.note.extension.formatedDate
-import kotlinx.android.synthetic.main.add_reminder_fragment.*
+import com.aakashbista.note.extension.formatDate
 import kotlinx.android.synthetic.main.note_item.view.reminderDescription
 import kotlinx.android.synthetic.main.note_item.view.reminderTitle
 import kotlinx.android.synthetic.main.reminder_item.view.*
-import java.text.DateFormat
-import java.time.format.DateTimeFormatter
 
 class ReminderAdapter(
   private val reminderActionListner: ReminderActionListener
@@ -51,7 +46,7 @@ class ReminderAdapter(
             view.reminderTitle.text = reminder.title
             view.reminderDescription.text = reminder.description
             view.action_switch.isChecked = reminder.isEnabled
-            view.dateTime.text= reminder.dateTime.formatedDate()
+            view.dateTime.text= reminder.dateTime.formatDate()
             view.setOnClickListener {
                 reminderActionListener.reminderOpen(reminder)
             }

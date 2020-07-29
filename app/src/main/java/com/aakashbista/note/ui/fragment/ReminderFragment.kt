@@ -85,6 +85,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
     override fun reminderOpen(reminder: Reminder) {
         ReminderFragmentDirections.openReminder(reminder).navigateSafe()
+
     }
 
     override fun reminderStateChanged(reminder: Reminder, state: ReminderAdapter.ReminderState) {

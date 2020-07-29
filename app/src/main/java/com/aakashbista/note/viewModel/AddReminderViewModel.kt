@@ -24,6 +24,4 @@ class AddReminderViewModel(application: Application) : BaseViewModel(application
             repository.update(reminder)
         }
     }
-
-
 }

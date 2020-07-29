@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.add_notes_fragment.*
 
 class AddNotesFragment : Fragment(),
     NavigationFragment {
-
-
+    
     var note: Note? = null
     private lateinit var viewModel: AddNotesViewModel
 
@@ -79,11 +78,8 @@ class AddNotesFragment : Fragment(),
         return false
     }
 
-
     override fun onBackPressed(): Boolean {
         hideKeyboard()
         return super.onBackPressed()
     }
-
-
 }
