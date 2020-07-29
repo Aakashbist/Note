@@ -32,20 +32,18 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
         getAllNotes()
     }
 
-    fun isMultiSelectionStateActive(): Boolean {
-        return _toolbarState.value == ToolbarState.MultiSelectionState
-    }
-
     private fun getAllNotes() {
         notes = repository.getNotes()
+    }
 
+    fun isMultiSelectionStateActive(): Boolean {
+        return _toolbarState.value == ToolbarState.MultiSelectionState
     }
 
     fun deleteNote(note: Note) {
         launch {
             repository.deleteNote(note)
         }
-
     }
 
     fun setToolbarState(state: ToolbarState) {

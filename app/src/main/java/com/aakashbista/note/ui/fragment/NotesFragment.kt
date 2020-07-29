@@ -41,7 +41,6 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             this,
             viewLifecycleOwner,
             viewModel.selectedNotes
-//            viewModel.multiSelectionState
         )
         noteRecyclerView.adapter = noteAdapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
@@ -169,6 +168,11 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
         }
     }
 
+    override fun activateMultiSelectionMode() =
+        viewModel.setToolbarState(ToolbarState.MultiSelectionState)
+
+    override fun isMultiSelectionModeEnabled() = viewModel.isMultiSelectionStateActive()
+
     override fun onItemClicked(note: Note) {
         if (isMultiSelectionModeEnabled()) {
             viewModel.addOrRemoveNoteFromSelectedList(note)
@@ -176,11 +180,6 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             NotesFragmentDirections.openNote(note).navigateSafe()
         }
     }
-
-    override fun isMultiSelectionModeEnabled() = viewModel.isMultiSelectionStateActive()
-    override fun activateMultiSelectionMode() =
-        viewModel.setToolbarState(ToolbarState.MultiSelectionState)
-
 }
 
 

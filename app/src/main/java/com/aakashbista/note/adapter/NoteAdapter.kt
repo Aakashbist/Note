@@ -19,7 +19,6 @@ class NoteAdapter(
     private val itemClickListener: OnItemClickListener,
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<List<Note>>
-   // private val multipleSelectionState: LiveData<Boolean>
 
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     private var notes = emptyList<Note>()
@@ -30,14 +29,13 @@ class NoteAdapter(
             LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false),
             selectedNotes,
             lifecycleOwner
-          //  multipleSelectionState
         )
     }
 
     override fun getItemCount() = notes.size
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.setNotesInView(notes[position], itemClickListener, position)
+        holder.setNotesInView(notes[position], itemClickListener)
     }
 
 
@@ -57,11 +55,9 @@ class NoteAdapter(
         private val lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(view) {
 
-        private val SELECTED_COLOR = R.color.darkGrey
-        private val UNSELECTED_COLOR = R.color.white
         private lateinit var _note: Note
 
-        fun setNotesInView(note: Note, itemClickListener: OnItemClickListener, position: Int) {
+        fun setNotesInView(note: Note, itemClickListener: OnItemClickListener) {
 
             view.reminderTitle.text = note.title
             view.reminderDescription.text = note.note
@@ -80,9 +76,8 @@ class NoteAdapter(
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
 
                 if (notes != null) {
-                    Log.d("state", selectedNotes.value.toString())
                     if (notes.contains(note)) {
-                        itemView.cardView.changeColor(newColor = SELECTED_COLOR)
+                        itemView.cardView.changeColor(newColor =  R.color.darkGrey)
                     } else {
                         itemView.cardView.changeColor(newColor = R.color.white)
                     }
