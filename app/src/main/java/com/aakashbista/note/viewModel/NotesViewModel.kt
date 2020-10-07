@@ -13,9 +13,12 @@ import kotlinx.coroutines.launch
 
 class NotesViewModel(application: Application) : BaseViewModel(application) {
 
-    private var repository: NoteRepository = NoteRepository(application)
-    lateinit var notes: LiveData<List<Note>>
+    companion object{
+        const val PAGE_SIZE=20
+        const val MAX_SIZE=200
+    }
 
+    private var repository: NoteRepository = NoteRepository(application)
 
     private val _selectedNotes: MutableLiveData<List<Note>> = MutableLiveData()
     val selectedNotes: LiveData<List<Note>>
@@ -31,9 +34,9 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
 
     val noteLists = Pager(
         PagingConfig(
-            pageSize = 20,
+            pageSize = PAGE_SIZE,
             enablePlaceholders = true,
-            maxSize = 200
+            maxSize = MAX_SIZE
         )
     ) {
         repository.getPagedNotes()
@@ -73,6 +76,4 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
     fun clearSelectedNotes() {
         _selectedNotes.value = null
     }
-
-
 }

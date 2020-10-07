@@ -1,6 +1,5 @@
 package com.aakashbista.note.ui.Adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.extension.changeColor
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.note_item.view.*
 
 
@@ -21,9 +19,7 @@ class NoteAdapter(
     private val itemClickListener: OnItemClickListener,
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<List<Note>>
-
-
-) : PagingDataAdapter<Note,NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
+) : PagingDataAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
     private var notes = emptyList<Note>()
 
 
@@ -35,15 +31,8 @@ class NoteAdapter(
         )
     }
 
-
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.setNotesInView(getItem(position)!!, itemClickListener)
-    }
-
-
-    fun setItem(notes: List<Note>) {
-        this.notes = notes
-        notifyDataSetChanged()
+        getItem(position)?.let { holder.setNotesInView(it, itemClickListener) }
     }
 
     fun getNote(position: Int): Note {
@@ -56,7 +45,6 @@ class NoteAdapter(
         private val selectedNotes: LiveData<List<Note>>,
         private val lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(view) {
-
         private lateinit var _note: Note
 
         fun setNotesInView(note: Note, itemClickListener: OnItemClickListener) {
@@ -79,7 +67,7 @@ class NoteAdapter(
 
                 if (notes != null) {
                     if (notes.contains(note)) {
-                        itemView.cardView.changeColor(newColor =  R.color.darkGrey)
+                        itemView.cardView.changeColor(newColor = R.color.darkGrey)
                     } else {
                         itemView.cardView.changeColor(newColor = R.color.white)
                     }
@@ -91,14 +79,14 @@ class NoteAdapter(
         }
     }
 
-    companion object{
-        val DIFF_CALLBACK=object :DiffUtil.ItemCallback<Note>(){
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =oldItem.id==newItem.id
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
+            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =
+                oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem==newItem
-
+            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean =
+                oldItem == newItem
         }
-
     }
 
     interface OnItemClickListener {
@@ -106,5 +94,4 @@ class NoteAdapter(
         fun isMultiSelectionModeEnabled(): Boolean
         fun activateMultiSelectionMode()
     }
-
 }

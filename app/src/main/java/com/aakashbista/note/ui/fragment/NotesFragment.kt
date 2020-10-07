@@ -45,6 +45,7 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             viewLifecycleOwner,
             viewModel.selectedNotes
         )
+        
         noteRecyclerView.adapter = noteAdapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(noteRecyclerView)
@@ -113,11 +114,8 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             when (item?.itemId) {
                 R.id.action_delete -> {
                     val selectedNotes = viewModel.getSelectedNotes()
-                    if (selectedNotes != null) {
-                        for (note in selectedNotes) {
-                            viewModel.deleteNote(note)
-
-                        }
+                    selectedNotes.forEach { note ->
+                        viewModel.deleteNote(note)
                     }
                     viewModel.setToolbarState(ToolbarState.NormalViewState)
                     context?.toast("deleted")
