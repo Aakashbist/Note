@@ -3,7 +3,8 @@ package com.aakashbista.note.viewModel
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.aakashbista.note.BaseViewModel
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.repository.NoteRepository
@@ -28,13 +29,16 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
         get() = _toolbarState
 
 
-    init {
-        getAllNotes()
-    }
+    val noteLists = Pager(
+        PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = true,
+            maxSize = 200
+        )
+    ) {
+        repository.getPagedNotes()
+    }.flow
 
-    private fun getAllNotes() {
-        notes = repository.getNotes()
-    }
 
     fun isMultiSelectionStateActive(): Boolean {
         return _toolbarState.value == ToolbarState.MultiSelectionState
@@ -60,7 +64,7 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
         } else {
             list.add(note)
         }
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             setToolbarState(ToolbarState.NormalViewState)
         }
         _selectedNotes.value = list

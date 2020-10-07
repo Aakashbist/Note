@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.note_item.view.reminderTitle
 import kotlinx.android.synthetic.main.reminder_item.view.*
 
 class ReminderAdapter(
-    private val reminderActionListner: ReminderActionListener
+    private val reminderActionListener: ReminderActionListener
 ) : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
 
     private var reminders = emptyList<Reminder>()
@@ -28,7 +28,7 @@ class ReminderAdapter(
     override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
         holder.setReminder(
             reminders[position],
-            reminderActionListner
+            reminderActionListener
         )
     }
 

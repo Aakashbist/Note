@@ -2,17 +2,14 @@ package com.aakashbista.note.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.db.NoteDao
 import com.aakashbista.note.db.AppDatabase
 
 class NoteRepository(private val application: Application){
 
-     private lateinit var noteDao: NoteDao
-
-    init {
-        noteDao = AppDatabase(application).getNoteDao()
-    }
+     private var noteDao: NoteDao = AppDatabase(application).getNoteDao()
 
     suspend fun addNote(note: Note) {
                 noteDao.addNote(note)
@@ -22,9 +19,9 @@ class NoteRepository(private val application: Application){
                 noteDao.deleteNote(note)
     }
 
-     fun getNotes(): LiveData<List<Note>> {
-          return noteDao.getNotes()
 
+    fun getPagedNotes(): PagingSource<Int, Note> {
+        return noteDao.getPagedNotes()
     }
 
     suspend fun update(note: Note){

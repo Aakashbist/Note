@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,8 @@ import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.NotesViewModel
 import kotlinx.android.synthetic.main.notes_fragment.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
 
@@ -46,12 +49,12 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(noteRecyclerView)
 
-
-        viewModel.notes.observe(viewLifecycleOwner, Observer { notes ->
-            notes?.let {
-                noteAdapter.setItem(notes)
+        lifecycleScope.launch {
+            viewModel.noteLists.collect {
+                noteAdapter.submitData(it)
             }
-        })
+        }
+
         btn_add.setOnClickListener {
             NotesFragmentDirections.openNote().navigateSafe()
         }
@@ -95,7 +98,7 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
 
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val note = noteAdapter.getNote(viewHolder.adapterPosition)
+                val note = noteAdapter.getNote(viewHolder.bindingAdapterPosition)
                 viewModel.deleteNote(note)
                 context?.let {
                     it.toast("Note Deleted")
@@ -123,14 +126,12 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
                 R.id.action_share -> {
                     val builder = StringBuilder()
                     val selectedNotes = viewModel.getSelectedNotes()
-                    if (selectedNotes != null) {
-                        for (note in selectedNotes) {
+                    for (note in selectedNotes) {
 
-                            builder.append(note.title)
-                                .append("\n")
-                                .append(note.note)
-                                .append("\n\n")
-                        }
+                        builder.append(note.title)
+                            .append("\n")
+                            .append(note.note)
+                            .append("\n\n")
                     }
                     val sendIntent: Intent = Intent().apply {
                         action = Intent.ACTION_SEND

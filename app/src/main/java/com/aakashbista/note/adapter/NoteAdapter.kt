@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Note
@@ -20,7 +22,8 @@ class NoteAdapter(
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<List<Note>>
 
-) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+) : PagingDataAdapter<Note,NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
     private var notes = emptyList<Note>()
 
 
@@ -32,10 +35,9 @@ class NoteAdapter(
         )
     }
 
-    override fun getItemCount() = notes.size
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.setNotesInView(notes[position], itemClickListener)
+        holder.setNotesInView(getItem(position)!!, itemClickListener)
     }
 
 
@@ -87,6 +89,16 @@ class NoteAdapter(
                 }
             })
         }
+    }
+
+    companion object{
+        val DIFF_CALLBACK=object :DiffUtil.ItemCallback<Note>(){
+            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =oldItem.id==newItem.id
+
+            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean = oldItem==newItem
+
+        }
+
     }
 
     interface OnItemClickListener {

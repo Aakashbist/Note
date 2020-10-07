@@ -16,7 +16,6 @@ class ReminderViewModel(application: Application):BaseViewModel(application) {
         getAllReminders()
     }
 
-
     private fun getAllReminders() {
         reminders=repository.getReminders()
     }
@@ -25,7 +24,5 @@ class ReminderViewModel(application: Application):BaseViewModel(application) {
         launch{
             repository.deleteReminder(reminder)
         }
-
     }
-
 }
