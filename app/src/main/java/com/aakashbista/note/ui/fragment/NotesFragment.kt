@@ -45,7 +45,6 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             viewLifecycleOwner,
             viewModel.selectedNotes
         )
-        
         noteRecyclerView.adapter = noteAdapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(noteRecyclerView)

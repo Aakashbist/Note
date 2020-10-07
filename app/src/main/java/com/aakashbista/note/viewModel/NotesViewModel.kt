@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 class NotesViewModel(application: Application) : BaseViewModel(application) {
 
     companion object{
-        const val PAGE_SIZE=20
-        const val MAX_SIZE=200
+      private  const val PAGE_SIZE=20
+      private  const val MAX_SIZE=200
     }
 
     private var repository: NoteRepository = NoteRepository(application)
