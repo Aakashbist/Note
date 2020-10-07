@@ -13,15 +13,15 @@ class ReminderViewModel(application: Application):BaseViewModel(application) {
     lateinit var reminders:LiveData<List<Reminder>>
 
     init {
-       getAllReminders()
+        getAllReminders()
     }
 
 
     private fun getAllReminders() {
-       reminders=repository.getReminders()
+        reminders=repository.getReminders()
     }
 
-    fun deleteNote(reminder:Reminder){
+    fun deleteReminder(reminder:Reminder){
         launch{
             repository.deleteReminder(reminder)
         }

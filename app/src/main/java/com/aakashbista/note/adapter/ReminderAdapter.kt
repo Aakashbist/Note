@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.note_item.view.reminderTitle
 import kotlinx.android.synthetic.main.reminder_item.view.*
 
 class ReminderAdapter(
-  private val reminderActionListner: ReminderActionListener
+    private val reminderActionListner: ReminderActionListener
 ) : RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
 
     private var reminders = emptyList<Reminder>()
@@ -37,6 +37,10 @@ class ReminderAdapter(
         notifyDataSetChanged()
     }
 
+    fun getReminder(position: Int): Reminder {
+        return reminders[position]
+    }
+
     class ReminderViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun setReminder(
@@ -59,6 +63,7 @@ class ReminderAdapter(
     interface ReminderActionListener {
         fun reminderOpen(reminder: Reminder)
         fun reminderStateChanged(reminder: Reminder,state:ReminderState)
+        fun onReminderClicked(reminder:Reminder)
     }
 
     enum class ReminderState{
@@ -69,4 +74,6 @@ class ReminderAdapter(
             fun from(value : Boolean): ReminderState = if (value) ENABLE else DISABLE
         }
     }
+
+
 }
