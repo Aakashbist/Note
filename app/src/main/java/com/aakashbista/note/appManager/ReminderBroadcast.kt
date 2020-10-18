@@ -7,14 +7,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.aakashbista.note.R
 
-class ReminderBroadcast(message:String) : BroadcastReceiver() {
+class ReminderBroadcast() : BroadcastReceiver() {
     private lateinit var notificationCompat: NotificationManagerCompat
-
-
     override fun onReceive(context: Context?, intent: Intent?) {
-
         notificationCompat = NotificationManagerCompat.from(context!!)
-
         var builder = context?.let {
             NotificationCompat.Builder(it, AppNotificationManager.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_icon_round)
@@ -24,7 +20,6 @@ class ReminderBroadcast(message:String) : BroadcastReceiver() {
                 .build()
         }
         notificationCompat.notify(9, builder)
-
     }
 
 }

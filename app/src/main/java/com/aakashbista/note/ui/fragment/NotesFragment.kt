@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,7 +51,7 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
         itemTouchHelper.attachToRecyclerView(noteRecyclerView)
 
         lifecycleScope.launch {
-            viewModel.noteLists.collect {
+            viewModel.noteLists.collect { it: PagingData<Note> ->
                 noteAdapter.submitData(it)
             }
         }
@@ -96,19 +97,17 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
                 return false
             }
 
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val note = noteAdapter.getNote(viewHolder.bindingAdapterPosition)
-                viewModel.deleteNote(note)
+                (viewHolder as NoteAdapter.NoteViewHolder)._note?.let {
+                    viewModel.deleteNote(it)
+                }
                 context?.let {
                     it.toast("Note Deleted")
                 }
             }
         }
 
-
     inner class ActionModeCallback : ActionMode.Callback {
-
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             when (item?.itemId) {
                 R.id.action_delete -> {

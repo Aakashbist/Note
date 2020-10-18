@@ -97,7 +97,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val reminder = reminderAdapter.getReminder(viewHolder.adapterPosition)
+                val reminder = reminderAdapter.getReminder(viewHolder.bindingAdapterPosition)
                 viewModel.deleteReminder(reminder)
                 context?.let {
                     it.toast("Reminder Deleted")

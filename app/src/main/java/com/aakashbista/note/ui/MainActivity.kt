@@ -1,5 +1,6 @@
 package com.aakashbista.note.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        navigateToTrackingFragmentIfNeeded(intent)
         setSupportActionBar(toolbar as androidx.appcompat.widget.Toolbar)
 
         navController = Navigation.findNavController(this, R.id.fragment)
@@ -47,6 +48,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToTrackingFragmentIfNeeded(intent)
+    }
+
+    private fun navigateToTrackingFragmentIfNeeded(intent: Intent?) {
+        if(intent?.action == this.getString(R.string.ACTION_SHOW_REMINDER_FRAGMENT)) {
+            Navigation.findNavController(this, R.id.fragment).navigate(R.id.actionSendtoReminderFragment)
+        }
+    }
 
 
 }

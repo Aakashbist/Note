@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
@@ -20,8 +21,6 @@ class NoteAdapter(
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<List<Note>>
 ) : PagingDataAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
-    private var notes = emptyList<Note>()
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -35,38 +34,32 @@ class NoteAdapter(
         getItem(position)?.let { holder.setNotesInView(it, itemClickListener) }
     }
 
-    fun getNote(position: Int): Note {
-        return notes[position]
-    }
-
-
     class NoteViewHolder(
         val view: View,
         private val selectedNotes: LiveData<List<Note>>,
         private val lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(view) {
-        private lateinit var _note: Note
+       var _note: Note? = null
 
         fun setNotesInView(note: Note, itemClickListener: OnItemClickListener) {
-
-            view.reminderTitle.text = note.title
-            view.reminderDescription.text = note.note
+            this._note = note
+            view.reminderTitle.text = _note?.title
+            view.reminderDescription.text = _note?.note
 
             view.setOnClickListener {
-                itemClickListener.onItemClicked(note)
+                itemClickListener.onItemClicked(_note!!)
             }
 
             view.setOnLongClickListener {
                 itemClickListener.activateMultiSelectionMode()
-                itemClickListener.onItemClicked(note)
+                itemClickListener.onItemClicked(_note!!)
                 true
             }
 
-            _note = note
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
 
                 if (notes != null) {
-                    if (notes.contains(note)) {
+                    if (notes.contains(_note!!)) {
                         itemView.cardView.changeColor(newColor = R.color.darkGrey)
                     } else {
                         itemView.cardView.changeColor(newColor = R.color.white)

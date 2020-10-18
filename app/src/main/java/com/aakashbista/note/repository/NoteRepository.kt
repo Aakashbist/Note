@@ -7,27 +7,27 @@ import com.aakashbista.note.db.Note
 import com.aakashbista.note.db.NoteDao
 import com.aakashbista.note.db.AppDatabase
 
-class NoteRepository(private val application: Application){
+class NoteRepository(application: Application): INoteRepository{
 
      private var noteDao: NoteDao = AppDatabase(application).getNoteDao()
 
-    suspend fun addNote(note: Note) {
+    override suspend fun addNote(note: Note) {
                 noteDao.addNote(note)
     }
 
-    suspend fun deleteNote(note: Note) {
+    override suspend fun deleteNote(note: Note) {
                 noteDao.deleteNote(note)
     }
 
 
-    fun getPagedNotes(): PagingSource<Int, Note> {
+    override fun getPagedNotes(): PagingSource<Int, Note> {
         return noteDao.getPagedNotes()
     }
 
-    suspend fun update(note: Note){
+    override suspend fun update(note: Note){
         return noteDao.update(note)
     }
-    suspend fun getNoteById(id:Int): Note{
+    override  suspend fun getNoteById(id:Int): Note{
         return noteDao.getNoteById(id)
     }
 }

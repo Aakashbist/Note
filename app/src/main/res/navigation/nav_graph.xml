@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/notes">
+    <action android:id="@+id/actionSendtoReminderFragment"
+        app:destination="@+id/reminderFragment" />
 
     <fragment
         android:id="@+id/addNotes"

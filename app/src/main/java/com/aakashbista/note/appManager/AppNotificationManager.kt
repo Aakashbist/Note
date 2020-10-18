@@ -9,7 +9,7 @@ import com.aakashbista.note.R
 
 class AppNotificationManager : Application() {
     companion object {
-         val CHANNEL_ID = "Reminder"
+         const val CHANNEL_ID = "Reminder"
     }
 
     override fun onCreate() {

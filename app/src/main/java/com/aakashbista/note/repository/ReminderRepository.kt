@@ -6,29 +6,25 @@ import com.aakashbista.note.db.AppDatabase
 import com.aakashbista.note.db.Reminder
 import com.aakashbista.note.db.ReminderDao
 
-class ReminderRepository(private val application: Application) {
+class ReminderRepository(application: Application) : IReminderRepository {
 
-    private lateinit var reminderDao: ReminderDao
-
-    init {
-        reminderDao = AppDatabase(application).getReminderDao()
-    }
+    private var reminderDao: ReminderDao = AppDatabase(application).getReminderDao()
 
 
-    suspend fun addReminder(reminder: Reminder) {
+    override suspend fun addReminder(reminder: Reminder) {
         reminderDao.addReminder(reminder)
     }
 
-    suspend fun deleteReminder(reminder: Reminder) {
+    override suspend fun deleteReminder(reminder: Reminder) {
         reminderDao.deleteReminder(reminder)
     }
 
-    fun getReminders(): LiveData<List<Reminder>> {
+    override fun getReminders(): LiveData<List<Reminder>> {
         return reminderDao.getReminders()
 
     }
 
-    suspend fun update(reminder: Reminder) {
+    override   suspend fun update(reminder: Reminder) {
         return reminderDao.update(reminder)
     }
 
