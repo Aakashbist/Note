@@ -2,7 +2,6 @@ package com.aakashbista.note.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -10,7 +9,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.aakashbista.note.R
-import com.aakashbista.note.ui.fragment.DatePickerFragment
 import com.aakashbista.note.ui.navigation.NavigationManager
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,10 +16,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
-    private val navigationManager by lazy{
+    private val navigationManager by lazy {
         NavigationManager(this, R.id.fragment)
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.fragment)
         bottom_navigation.setupWithNavController(navController)
-      NavigationUI.setupActionBarWithNavController(this, navController)
-
-
+        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -44,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         navigationManager.onBackPressed { isRoot ->
-             true
+            true
         }
     }
 
@@ -54,10 +49,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToTrackingFragmentIfNeeded(intent: Intent?) {
-        if(intent?.action == this.getString(R.string.ACTION_SHOW_REMINDER_FRAGMENT)) {
-            Navigation.findNavController(this, R.id.fragment).navigate(R.id.actionSendtoReminderFragment)
+        if (intent?.action == this.getString(R.string.ACTION_SHOW_REMINDER_FRAGMENT)) {
+            Navigation.findNavController(this, R.id.fragment)
+                .navigate(R.id.actionSendtoReminderFragment)
         }
     }
-
-
 }

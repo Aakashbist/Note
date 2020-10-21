@@ -1,4 +1,4 @@
-package com.aakashbista.note.ui.Adapter
+package com.aakashbista.note.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
@@ -39,46 +38,48 @@ class NoteAdapter(
         private val selectedNotes: LiveData<List<Note>>,
         private val lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(view) {
-       var _note: Note? = null
+
+        var _note: Note? = null
 
         fun setNotesInView(note: Note, itemClickListener: OnItemClickListener) {
             this._note = note
-            view.reminderTitle.text = _note?.title
-            view.reminderDescription.text = _note?.note
+            view.reminderTitle.text = note.title
+            view.reminderDescription.text = note.note
 
             view.setOnClickListener {
-                itemClickListener.onItemClicked(_note!!)
+                itemClickListener.onItemClicked(note)
             }
 
             view.setOnLongClickListener {
                 itemClickListener.activateMultiSelectionMode()
-                itemClickListener.onItemClicked(_note!!)
+                itemClickListener.onItemClicked(note)
                 true
             }
 
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
-
-                if (notes != null) {
-                    if (notes.contains(_note!!)) {
-                        itemView.cardView.changeColor(newColor = R.color.darkGrey)
+                itemView.cardView.changeColor(
+                    newColor = if (notes != null && notes.contains(note)) {
+                        SELECTED_COLOR
                     } else {
-                        itemView.cardView.changeColor(newColor = R.color.white)
+                        UNSELECTED_COLOR
                     }
-                } else {
-
-                    itemView.cardView.changeColor(newColor = R.color.white)
-                }
+                )
             })
         }
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean =
-                oldItem.id == newItem.id
+        private const val SELECTED_COLOR = R.color.darkGrey
+        private const val UNSELECTED_COLOR = R.color.white
 
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean =
-                oldItem == newItem
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
+            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 

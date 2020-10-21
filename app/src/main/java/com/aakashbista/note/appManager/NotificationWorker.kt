@@ -27,7 +27,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
 
         var builder =
             NotificationCompat.Builder(applicationContext, AppNotificationManager.CHANNEL_ID)
-
+                .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentText(description)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

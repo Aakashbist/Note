@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.state.ToolbarState
-import com.aakashbista.note.ui.Adapter.NoteAdapter
-import com.aakashbista.note.ui.Adapter.NoteAdapter.OnItemClickListener
+import com.aakashbista.note.adapter.NoteAdapter
+import com.aakashbista.note.adapter.NoteAdapter.OnItemClickListener
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.NotesViewModel
