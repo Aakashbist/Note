@@ -12,10 +12,14 @@ import androidx.navigation.fragment.findNavController
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.extension.hideKeyboard
+import com.aakashbista.note.extension.snackbar
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.AddNotesViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.add_notes_fragment.*
+import kotlinx.android.synthetic.main.add_notes_fragment.reminderDescription
+import kotlinx.android.synthetic.main.notes_fragment.*
 
 class AddNotesFragment : Fragment(),
     NavigationFragment {
@@ -68,12 +72,14 @@ class AddNotesFragment : Fragment(),
             val mNote = Note(title, body)
             if (note == null) {
                 viewModel.addNote(mNote)
-                it.toast("Note Added")
-            } else {
+                //it.toast("Note Added")
+                requireView().snackbar("added")
+              } else {
                 mNote.id = note!!.id
                 viewModel.update(mNote)
                 it.toast("Note updated")
             }
+            hideKeyboard()
         }
         return false
     }

@@ -4,36 +4,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="320dp"
     tools:context=".ui.fragment.AddReminderFragment"
     >
 
-
     <EditText
         android:id="@+id/title"
-        android:layout_width="321dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:hint="Title"
         android:textColor="#000"
-        android:textSize="24sp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/dateTimeTextView"
-        android:layout_width="327dp"
-        android:hint="date time"
+        android:layout_width="0dp"
         android:layout_height="47dp"
-        android:layout_marginStart="22dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/action_ok"
+        android:gravity="center|start"
+        android:hint="Date and Time"
+        android:textSize="16sp"
+
         app:layout_constraintEnd_toEndOf="@+id/reminderDescription"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/reminderDescription"
-        app:layout_constraintVertical_bias="0.035" />
+        app:layout_constraintTop_toBottomOf="@+id/reminderDescription" />
 
     <TextView
         android:id="@+id/action_ok"
@@ -41,12 +42,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:text="OK"
         android:textColor="#33bbff"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/action_cancel"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/action_cancel"
+        app:layout_constraintTop_toBottomOf="@+id/dateTimeTextView" />
 
     <TextView
         android:id="@+id/action_cancel"
@@ -60,32 +62,32 @@
         android:textColor="#33bbff"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/action_ok" />
 
     <ImageView
         android:id="@+id/setReminderBotton"
-        android:layout_width="37dp"
-        android:layout_height="69dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:alpha="0.6"
         app:layout_constraintBottom_toBottomOf="@+id/dateTimeTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/title"
-        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/dateTimeTextView"
+        app:layout_constraintTop_toTopOf="@+id/dateTimeTextView"
         app:srcCompat="@drawable/ic_add_alarm" />
 
     <EditText
         android:id="@+id/reminderDescription"
-        android:layout_width="321dp"
-        android:layout_height="42dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:background="@null"
-        android:hint="enter description"
+        android:hint="Description"
         android:textColor="#000"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 

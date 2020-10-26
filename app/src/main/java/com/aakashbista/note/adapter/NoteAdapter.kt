@@ -19,7 +19,12 @@ class NoteAdapter(
     private val itemClickListener: OnItemClickListener,
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<List<Note>>
-) : PagingDataAdapter<Note, NoteAdapter.NoteViewHolder>(DIFF_CALLBACK) {
+) : PagingDataAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffUtil()) {
+
+    companion object {
+        private const val SELECTED_COLOR = R.color.darkGrey
+        private const val UNSELECTED_COLOR = R.color.white
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -68,18 +73,13 @@ class NoteAdapter(
         }
     }
 
-    companion object {
-        private const val SELECTED_COLOR = R.color.darkGrey
-        private const val UNSELECTED_COLOR = R.color.white
+    class NoteDiffUtil : DiffUtil.ItemCallback<Note>() {
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
-            override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
+            return oldItem == newItem
         }
     }
 

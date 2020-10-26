@@ -2,6 +2,7 @@ package com.aakashbista.note.ui.fragment
 
 
 import android.app.Application
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +36,11 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     var reminder: Reminder? = null
     lateinit var viewModel: AddReminderViewModel
     private var localDateTime: LocalDateTime? = null
+
+//    TODO implement material dialog
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        return super.onCreateDialog(savedInstanceState)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,15 +120,12 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
                 it.toast("Reminder updated")
             }
         }
-
-
         return false
     }
 
     private fun showDatePickerDialog() {
         AddReminderFragmentDirections.openDatePicker(reminder?.dateTime).navigateSafe()
     }
-
 
     private fun setAlarm(time: Duration, reminder:Reminder): String {
         val reminderRequest = OneTimeWorkRequest
@@ -134,15 +137,11 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         val instance = WorkManager.getInstance(requireContext())
         instance.enqueue(reminderRequest)
         return reminderRequest.id.toString()
-
     }
-
-
 
     override fun onTimeSet(year: Int, month: Int, day: Int, hour: Int, minute: Int) {
         localDateTime = LocalDateTime.of(year, month, day, hour, minute)
         val dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yy hh:mm a")
         dateTimeTextView.text = localDateTime?.format(dateTimeFormatter)
     }
-
 }
