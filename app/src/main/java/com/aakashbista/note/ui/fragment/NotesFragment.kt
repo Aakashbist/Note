@@ -16,6 +16,7 @@ import com.aakashbista.note.db.Note
 import com.aakashbista.note.state.ToolbarState
 import com.aakashbista.note.adapter.NoteAdapter
 import com.aakashbista.note.adapter.NoteAdapter.OnItemClickListener
+import com.aakashbista.note.extension.snackbar
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.NotesViewModel
@@ -101,9 +102,8 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
                 (viewHolder as NoteAdapter.NoteViewHolder)._note?.let {
                     viewModel.deleteNote(it)
                 }
-                context?.let {
-                    it.toast("Note Deleted")
-                }
+                requireView().snackbar("deleted")
+
             }
         }
 

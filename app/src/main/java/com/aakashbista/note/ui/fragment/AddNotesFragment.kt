@@ -12,20 +12,16 @@ import androidx.navigation.fragment.findNavController
 import com.aakashbista.note.R
 import com.aakashbista.note.db.Note
 import com.aakashbista.note.extension.hideKeyboard
-import com.aakashbista.note.extension.snackbar
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
-import com.aakashbista.note.viewModel.AddNotesViewModel
-import com.google.android.material.snackbar.Snackbar
+import com.aakashbista.note.viewModel.NotesViewModel
 import kotlinx.android.synthetic.main.add_notes_fragment.*
-import kotlinx.android.synthetic.main.add_notes_fragment.reminderDescription
-import kotlinx.android.synthetic.main.notes_fragment.*
 
 class AddNotesFragment : Fragment(),
     NavigationFragment {
-    
+
     var note: Note? = null
-    private lateinit var viewModel: AddNotesViewModel
+    private lateinit var viewModel: NotesViewModel
 
 
     override fun onCreateView(
@@ -36,7 +32,7 @@ class AddNotesFragment : Fragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddNotesViewModel(Application())::class.java)
+        viewModel = ViewModelProvider(this).get(NotesViewModel(Application())::class.java)
 
         arguments?.let {
             note = AddNotesFragmentArgs.fromBundle(it).note
@@ -45,7 +41,6 @@ class AddNotesFragment : Fragment(),
         }
 
         btn_save.setOnClickListener {
-
             if (saveNote()) return@setOnClickListener
             findNavController().navigateUp()
         }
@@ -72,9 +67,8 @@ class AddNotesFragment : Fragment(),
             val mNote = Note(title, body)
             if (note == null) {
                 viewModel.addNote(mNote)
-                //it.toast("Note Added")
-                requireView().snackbar("added")
-              } else {
+                it.toast("Note added")
+            } else {
                 mNote.id = note!!.id
                 viewModel.update(mNote)
                 it.toast("Note updated")

@@ -20,7 +20,6 @@ import com.aakashbista.note.extension.createDate
 import com.aakashbista.note.extension.millisToNotify
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
-import com.aakashbista.note.viewModel.AddReminderViewModel
 import com.aakashbista.note.viewModel.ReminderViewModel
 import kotlinx.android.synthetic.main.fragment_reminder.*
 import java.util.*
@@ -31,7 +30,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
 
     private lateinit var reminderAdapter: ReminderAdapter
     private lateinit var viewModel: ReminderViewModel
-    private lateinit var addReminderViewModel: AddReminderViewModel
+    private lateinit var addReminderViewModel: ReminderViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +48,7 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
         reminderAdapter = ReminderAdapter(this)
         reminderRecyclerView.adapter = reminderAdapter
         viewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
-        addReminderViewModel = ViewModelProvider(this).get(AddReminderViewModel::class.java)
+        addReminderViewModel = ViewModelProvider(this).get(ReminderViewModel::class.java)
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(reminderRecyclerView)
 

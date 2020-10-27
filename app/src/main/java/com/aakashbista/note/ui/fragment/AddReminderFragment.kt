@@ -2,7 +2,6 @@ package com.aakashbista.note.ui.fragment
 
 
 import android.app.Application
-import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +19,7 @@ import com.aakashbista.note.extension.createDate
 import com.aakashbista.note.extension.formatDate
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
-import com.aakashbista.note.viewModel.AddReminderViewModel
+import com.aakashbista.note.viewModel.ReminderViewModel
 import kotlinx.android.synthetic.main.add_reminder_fragment.*
 import java.time.Duration
 import java.time.LocalDateTime
@@ -34,7 +33,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
     NavigationFragment {
 
     var reminder: Reminder? = null
-    lateinit var viewModel: AddReminderViewModel
+    lateinit var viewModel: ReminderViewModel
     private var localDateTime: LocalDateTime? = null
 
 //    TODO implement material dialog
@@ -51,7 +50,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddReminderViewModel(Application())::class.java)
+        viewModel = ViewModelProvider(this).get(ReminderViewModel(Application())::class.java)
 
         arguments?.let {
             reminder = AddReminderFragmentArgs.fromBundle(it).reminder

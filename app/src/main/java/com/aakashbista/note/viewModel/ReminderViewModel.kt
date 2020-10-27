@@ -7,21 +7,33 @@ import com.aakashbista.note.db.Reminder
 import com.aakashbista.note.repository.ReminderRepository
 import kotlinx.coroutines.launch
 
-class ReminderViewModel(application: Application):BaseViewModel(application) {
+class ReminderViewModel(application: Application) : BaseViewModel(application) {
 
-    val repository:ReminderRepository= ReminderRepository(application)
-    lateinit var reminders:LiveData<List<Reminder>>
+    val repository: ReminderRepository = ReminderRepository(application)
+    lateinit var reminders: LiveData<List<Reminder>>
 
     init {
         getAllReminders()
     }
 
     private fun getAllReminders() {
-        reminders=repository.getReminders()
+        reminders = repository.getReminders()
     }
 
-    fun deleteReminder(reminder:Reminder){
-        launch{
+    fun addReminder(reminder: Reminder) {
+        launch {
+            repository.addReminder(reminder)
+        }
+    }
+
+    fun update(reminder: Reminder) {
+        launch {
+            repository.update(reminder)
+        }
+    }
+
+    fun deleteReminder(reminder: Reminder) {
+        launch {
             repository.deleteReminder(reminder)
         }
     }

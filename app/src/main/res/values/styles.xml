@@ -8,16 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="snackbarStyle">@style/Snackbar</item>
+<!--        <item name="snackbarStyle">@style/Snackbar</item>-->
     </style>
 
 
-    <style name="Snackbar" parent="Widget.MaterialComponents.Snackbar">
-        <item name="android:layout_margin">@null</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginLeft">0dp</item>
-        <item name="android:layout_marginRight">0dp</item>
-        <item name="android:layout_marginBottom">50dp</item>   //custom bottom margin
-    </style>
+<!--    <style name="Snackbar" parent="Widget.MaterialComponents.Snackbar">-->
+<!--        <item name="android:layout_margin">@null</item>-->
+<!--        <item name="android:layout_marginTop">0dp</item>-->
+<!--        <item name="android:layout_marginLeft">0dp</item>-->
+<!--        <item name="android:layout_marginRight">0dp</item>-->
+<!--        <item name="android:layout_marginBottom">50dp</item>   //custom bottom margin-->
+<!--    </style>-->
 
 </resources>

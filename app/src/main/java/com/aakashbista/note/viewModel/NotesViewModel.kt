@@ -43,16 +43,30 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
         repository.getPagedNotes()
     }.flow
 
+    fun addNote(note: Note) {
+        launch {
+            repository.addNote(note)
+        }
 
-    fun isMultiSelectionStateActive(): Boolean {
-        return _toolbarState.value == ToolbarState.MultiSelectionState
     }
 
     fun deleteNote(note: Note) {
         launch {
             repository.deleteNote(note)
+
         }
     }
+
+    fun update(note: Note){
+        launch {
+            repository.update(note)
+        }
+    }
+
+    fun isMultiSelectionStateActive(): Boolean {
+        return _toolbarState.value == ToolbarState.MultiSelectionState
+    }
+
 
     fun setToolbarState(state: ToolbarState) {
         _toolbarState.value = state
