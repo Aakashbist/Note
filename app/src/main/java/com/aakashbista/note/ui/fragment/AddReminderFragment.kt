@@ -55,7 +55,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         arguments?.let {
             reminder = AddReminderFragmentArgs.fromBundle(it).reminder
             if (reminder != null) {
-                localDateTime=reminder?.dateTime
+                localDateTime = reminder?.dateTime
                 title.setText(reminder?.title)
                 reminderDescription.setText(reminder?.description)
                 dateTimeTextView.setText(reminder?.dateTime?.formatDate())
@@ -108,14 +108,16 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
                 description,
                 localDateTime!!
             )
-            val reminderNotificationWorkRequestId = setAlarm(delay,mReminder )
-            mReminder=mReminder.copy(workRequestId =reminderNotificationWorkRequestId )
+            val reminderNotificationWorkRequestId = setAlarm(delay, mReminder)
+            mReminder = mReminder.copy(workRequestId = reminderNotificationWorkRequestId)
             if (reminder == null) {
                 viewModel.addReminder(mReminder)
+//                parentFragment?.requireView()?.let { view -> view.snackbar("Reminder Added") }
                 it.toast("Reminder Added")
             } else {
                 mReminder.id = reminder!!.id
                 viewModel.update(mReminder)
+//         parentFragment?.requireView()?.let { view -> view.snackbar("Reminder Added") }
                 it.toast("Reminder updated")
             }
         }
@@ -126,7 +128,7 @@ class AddReminderFragment : DialogFragment(), TimePickerFragment.TimeSetListener
         AddReminderFragmentDirections.openDatePicker(reminder?.dateTime).navigateSafe()
     }
 
-    private fun setAlarm(time: Duration, reminder:Reminder): String {
+    private fun setAlarm(time: Duration, reminder: Reminder): String {
         val reminderRequest = OneTimeWorkRequest
             .Builder(NotificationWorker::class.java)
             .setInputData(reminder.createDate())

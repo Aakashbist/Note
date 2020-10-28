@@ -67,6 +67,7 @@ class AddNotesFragment : Fragment(),
             val mNote = Note(title, body)
             if (note == null) {
                 viewModel.addNote(mNote)
+                //  requireView().snackbar("Note Added")
                 it.toast("Note added")
             } else {
                 mNote.id = note!!.id

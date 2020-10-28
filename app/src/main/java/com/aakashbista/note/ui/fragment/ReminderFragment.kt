@@ -18,6 +18,7 @@ import com.aakashbista.note.appManager.NotificationWorker
 import com.aakashbista.note.db.Reminder
 import com.aakashbista.note.extension.createDate
 import com.aakashbista.note.extension.millisToNotify
+import com.aakashbista.note.extension.snackbar
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.ReminderViewModel
@@ -98,9 +99,10 @@ class ReminderFragment : Fragment(), NavigationFragment, MenuItem.OnMenuItemClic
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val reminder = reminderAdapter.getReminder(viewHolder.bindingAdapterPosition)
                 viewModel.deleteReminder(reminder)
-                context?.let {
-                    it.toast("Reminder Deleted")
-                }
+                requireView().snackbar("Reminder Deleted")
+//                context?.let {
+//                    it.toast("Reminder Deleted")
+//                }
             }
         }
 

@@ -21,11 +21,9 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
         get() = getParentFragmentListener<TimeSetListener>(true)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        timePickerData = TimePickerFragmentArgs.fromBundle(arguments!!).data!!
+        timePickerData = TimePickerFragmentArgs.fromBundle(requireArguments()).data!!
         var hour: Int = timePickerData.hourOfDay
         var minute: Int = timePickerData.minute
-
-
         return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
     }
 

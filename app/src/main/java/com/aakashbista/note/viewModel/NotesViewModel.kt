@@ -32,7 +32,6 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
     val toolbarState: LiveData<ToolbarState>
         get() = _toolbarState
 
-
     val noteLists = Pager(
         PagingConfig(
             pageSize = PAGE_SIZE,
@@ -47,7 +46,6 @@ class NotesViewModel(application: Application) : BaseViewModel(application) {
         launch {
             repository.addNote(note)
         }
-
     }
 
     fun deleteNote(note: Note) {

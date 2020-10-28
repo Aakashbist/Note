@@ -12,7 +12,6 @@ import java.time.LocalDateTime
 class DatePickerFragment : DialogFragment(), NavigationFragment,
     DatePickerDialog.OnDateSetListener {
 
-
     private  var localDateTime: LocalDateTime? = null
     private var year: Int = 0
     private var month: Int = 0
@@ -22,7 +21,7 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        localDateTime = DatePickerFragmentArgs.fromBundle(arguments!!).dateTime
+        localDateTime = DatePickerFragmentArgs.fromBundle(requireArguments()).dateTime
 
         if (localDateTime != null) {
             setDateTimeInCalender()
@@ -51,7 +50,6 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
             hourOfDay = it.hour
             minute = it.minute
         }
-
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -64,8 +62,5 @@ class DatePickerFragment : DialogFragment(), NavigationFragment,
                 minute
             )
         ).navigateSafe()
-
     }
-
-
 }

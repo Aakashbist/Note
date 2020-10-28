@@ -16,15 +16,6 @@ fun View.changeColor(newColor: Int) {
     )
 }
 
-//fun View.snackbar(message: String,action:String) {
-//    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG).setAction(action, this.setOnClickListener {
-//
-//    })
-//    snackbar.setBackgroundTint(ContextCompat.getColor(this.context, R.color.colorAccent))
-//    snackbar.anchorView = bottom_navigation
-//    snackbar.show()
-//}
-
 fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
     action?.let {
@@ -32,5 +23,8 @@ fun View.snackbar(message: String, action: (() -> Unit)? = null) {
             it()
         }
     }
+    snackbar.anchorView = bottom_navigation
+    snackbar.setTextColor(ContextCompat.getColor(context,R.color.white))
+    snackbar.setActionTextColor(ContextCompat.getColor(context, R.color.colorAccent));
     snackbar.show()
 }

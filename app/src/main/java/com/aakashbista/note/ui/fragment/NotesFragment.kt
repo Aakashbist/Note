@@ -2,6 +2,7 @@ package com.aakashbista.note.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +21,7 @@ import com.aakashbista.note.extension.snackbar
 import com.aakashbista.note.ui.Extension.toast
 import com.aakashbista.note.ui.navigation.NavigationFragment
 import com.aakashbista.note.viewModel.NotesViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.notes_fragment.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -101,9 +103,8 @@ class NotesFragment : Fragment(), NavigationFragment, OnItemClickListener {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 (viewHolder as NoteAdapter.NoteViewHolder)._note?.let {
                     viewModel.deleteNote(it)
+                    requireView().snackbar("Note Deleted"){viewModel.addNote(it)}
                 }
-                requireView().snackbar("deleted")
-
             }
         }
 
